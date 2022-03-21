@@ -80,7 +80,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer
-      :absolute="!fixed"
       app
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -110,7 +109,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Blog Comment'
     }
   }
 }

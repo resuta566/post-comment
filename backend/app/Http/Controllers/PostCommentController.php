@@ -9,9 +9,19 @@ class PostCommentController extends Controller
 {    
     public function show(Post $post)
     {
-        $postComments = $post->comments;
+        $postComments = $post->comments();
+        $postCounter = $post->comments()->count();
 
-        return response()->json($postComments, 200);
+        $max_depth = 3;
+        $firstDepthComments = $post->comments()
+            ->whereNull('comment_id')
+            ->with('replies')
+            ->latest()
+            ->get();
+            
+        
+
+        return response()->json($firstDepthComments, 200);
     }
 
     public function store(Post $post, Request $request)

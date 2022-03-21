@@ -4,7 +4,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - frontend',
-    title: 'frontend',
+    title: 'Post',
     htmlAttrs: {
       lang: 'en'
     },
@@ -25,7 +25,11 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios.js',
+    '~/plugins/api.js',
+    {src: '~/plugins/vueTimeAgo.client.js', mode: 'client'}
   ],
+
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -43,7 +47,26 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: process.env.API_URL + "/api/" || "http://127.0.0.1:8000/api/",
+    retry: { retries: 3 }
+  },
+  
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.API_URL+"/api/" || "http://127.0.0.1:8000/api/",
+    }
+  },
+
+  publicRuntimeConfig: {
+    gtm: {
+      id: process.env.GOOGLE_TAG_MANAGER_ID
+    },
+    axios: {
+      browserBaseURL: process.env.API_URL+"/api/" || "http://127.0.0.1:8000/api/",
+      baseURL: process.env.API_URL+"/api/" || "http://127.0.0.1:8000/api/",
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

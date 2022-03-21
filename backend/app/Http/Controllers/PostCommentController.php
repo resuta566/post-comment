@@ -17,7 +17,7 @@ class PostCommentController extends Controller
             ->latest()
             ->get();
 
-        return response()->json($firstDepthComments, 200);
+        return response()->json($postComments, 200);
     }
 
     public function store(Post $post, Request $request)

@@ -7,7 +7,7 @@
             <div v-else></div>
             <v-card-text>
                 <v-row>
-                    <!-- {{commentReplies(sortedComments)}} -->
+                    <!-- Comment Loop -->
                     <v-col cols="12" v-for="comment in sortedComments" :key="comment.id">
                         <Comment 
                             :username="comment.username"
@@ -18,7 +18,6 @@
                         ></Comment>
                         <div v-if="comment.replies.length > 0 && last == true">
                             <SubComments :replies="commentReplies(comment.replies)" ></SubComments>
-                            <!-- {{ commentReplies(comment.replies) }} -->
                         </div>
                         <div v-else></div>
                     </v-col>
@@ -29,6 +28,7 @@
 </template>
 
 <script>
+// I just have to be sure that's why I created this component
 import Comment from '@/components/Comment'
 import SubComments from '@/components/SubComments'
 import Comments from '@/components/Comments'
@@ -46,18 +46,19 @@ export default {
                 return {}
             }
         },
-        last: {
+        last: { //If the last layer of comment
             type: Boolean,
             required: false,
             default: false
         }
     },
     computed: {
+        
         comments() {
             if(this.replies.length > 0) {
                 return this.replies
             }
-            return this.$store.getters['comment/comments']
+            return []
         },
         sortedComments() { 
             return this.comments.slice()
@@ -72,9 +73,7 @@ export default {
                 flat.push(replies[i]);
                 if(replies[i].replies.length > 0){
                     const childReplies = this.commentReplies(replies[i].replies)
-                    // console.log(...childReplies);
                     flat.push(...childReplies);
-                    // break;
                 }
             }
             return flat;

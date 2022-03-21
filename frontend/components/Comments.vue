@@ -6,7 +6,7 @@
             </v-card-title>
             <v-card-text>
                 <v-row>
-                    <!-- {{commentReplies(sortedComments)}} -->
+                    <!-- Comment Loop -->
                     <v-col cols="12" v-for="comment in sortedComments" :key="comment.id">
                         <Comment 
                             :username="comment.username"
@@ -16,6 +16,7 @@
                             :comment-id="comment.id"
                             @reply="reply(comment)"
                         ></Comment>
+                        <!-- If comment has replies then show - Recursive component -->
                         <div v-if="comment.replies.length > 0">
                             <SubComments :replies="comment.replies" :last="true"></SubComments>
                         </div>
@@ -47,39 +48,17 @@ export default {
         }
     },
     computed: {
+        // check comment if reply or parent comment
         comments() {
             if(this.replies.length > 0) {
                 return this.replies
             }
             return this.$store.getters['comment/comments']
         },
+        // Sort to newest first
         sortedComments() { 
             return this.comments.slice()
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).flat(2);
-        },
-        // commentReplies(replies) {
-        //     // console.log(replies, 'Bobo');
-        //     if(replies.length === 0) return;
-
-        //     let flatten = [];
-        //     for(let i= 0; replies.length <= i; i++){
-        //         // flatten.push(replies[i]);
-        //         console.log(replies[i]);
-
-        //         if(replies[i].replies.length === 0) break;
-
-        //         const child = this.commentReplies(replies[i].replies);
-        //         if(child.length === 0) return;
-        //         flatten.push(...child);
-        //         console.log(child, 'child');
-                
-        //     }
-        //     return flatten;
-        // }
-    },
-    methods: {
-        reply(comment){
-            console.log(comment);
         }
     }
 }

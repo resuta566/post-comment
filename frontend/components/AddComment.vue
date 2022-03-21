@@ -13,6 +13,7 @@
                             cols="11"
                             class="pr-1 mr-0 pb-0 mb-0"
                         >
+                        <!-- username field -->
                             <v-text-field
                                 v-model="username"
                                 :rules="usernameRules"
@@ -28,6 +29,7 @@
                             cols="11"
                             class="pr-1 mr-0 pt-0 mt-0"
                         >
+                        <!-- Comment Field -->
                             <v-text-field
                                 v-model="comment"
                                 :rules="commentRules"
@@ -60,7 +62,7 @@
 <script>
 export default {
     props: {
-        postId: {
+        postId: { // get the post id for api call
             type: [Number, String],
             required: true,
             default: 1
@@ -68,11 +70,10 @@ export default {
     },
     data() { 
         return {
-            replyingTo: false,
-            loading: false,
-            valid: false,
+            loading: false, //Card progress animation
+            valid: false, //form
             username: '',
-            usernameRules: [
+            usernameRules: [ // Frontend Validations
                 v => !!v || 'Username is required',
                 v => (v && v.length >= 5) || 'Name must be 5 or more than characters',
                 v => (v && v.length <= 15) || 'Name must be less than 15 characters',
@@ -86,12 +87,7 @@ export default {
     },
     computed:{
         replyTo() {
-            return this.$store.getters['comment/reply'];
-        }
-    },
-    watch:{
-        replyingTo(){
-            if(replyTo && !replyTo.isEmpty) return true;
+            return this.$store.getters['comment/reply']; //get the reply details from store
         }
     },
     methods: {
@@ -100,26 +96,31 @@ export default {
                 if(this.$refs.form.validate()){
                     let confirmation = confirm('Do you want to add this comment? ')
 
+                    // Do nothing if user cancel
                     if(!confirmation) {
                         return;
                     }
                     
+                    //Show card loading progress bar
                     this.loading = true
 
+                    // Initialize comment object
                     let commentForm = {
                         username: this.username,
                         comment: this.comment,
                         comment_id: this.replyTo ? this.replyTo.commentId : null,
                     }
 
+                    // Comment Post API
                     this.$api.commentApi.postComment(this.postId, commentForm)
                         .then(response => {
-                            console.log(response);
-
+                            // check if status Ok
                             if(response.status === 200){
+                                // Get the new Comments
                                 this.$api.commentApi.getComments(this.postId)
                                     .then(response => {
                                         this.$store.commit('comment/setComments', response.data)
+                                        // Just to be sure that will execute after storing new comments
                                         setTimeout(() => {
                                             this.$refs.form.reset();
                                             this.$refs.form.resetValidation();
@@ -130,7 +131,7 @@ export default {
                                         console.log(err, 'getComments');
                                     })
                                     .finally(() => {
-                                        this.loading = false;
+                                        this.loading = false; // Stop loading progressbar animation
                                     })
                             }
                         })
@@ -138,10 +139,10 @@ export default {
                             console.log(err, 'postComments');
                         })
                         .finally(() => {
-                            this.loading = false;
+                            this.loading = false; // Stop loading progressbar animation
                         })
                 }else{
-                    this.loading = false
+                    this.loading = false // Stop loading progressbar animation
                 }
             })
         }

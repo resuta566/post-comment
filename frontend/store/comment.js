@@ -18,8 +18,5 @@ export const mutations = {
     },
     setReply: (state, val) => {
         state.reply = JSON.parse(JSON.stringify(val)) ;
-    },
-    // addComment: (state, comment) => {
-    //     state.comments.push(comment)
-    // }
+    }
 }

@@ -15,6 +15,7 @@
                     >
                         Reply
                     </v-btn>
+                    <!-- Time Ago ex 4h, just now etc... -->
                     <time-ago :datetime="new Date(commentDate + ' UTC')"></time-ago> 
                     </ul>
                 </v-card-actions>
@@ -54,6 +55,7 @@ export default {
     },
     methods: {
         reply(){
+            // if call then store this values to the state to be used for replying or adding comment
             this.$store.commit('comment/setReply',
                 { 
                     commentId: this.commentId, 
@@ -61,7 +63,7 @@ export default {
                     comment: ' - ' + this.comment, 
                     postId:this.postId 
                 });
-
+            // Smooth scrolling to the comment form
             setTimeout(()=>{
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             })

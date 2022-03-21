@@ -5,6 +5,7 @@
         color="red"
         dark
       >
+      <!-- Post Title -->
         <v-card-title>
           <v-icon
             large
@@ -14,13 +15,13 @@
           </v-icon>
           <span class="text-h6 font-weight-light">{{ post.title }}</span>
         </v-card-title>
-
+        <!-- Post Body -->
         <v-card-text class="text-h5 font-weight-bold">
           <p style="color: #e9e9e9;">
             {{ post.body }}
           </p>
         </v-card-text>
-
+        <!-- Avatar Details -->
         <v-card-actions>
           <v-list-item class="grow">
             <v-list-item-avatar color="grey darken-3">
@@ -59,30 +60,30 @@
   </v-row>
 </template>
 <script>
-// import SubComments from '@/components/SubComments'
 import Comments from '@/components/Comments'
 import AddComment from '@/components/AddComment'
 
 export default {
   components: {
-    // SubComments,
     Comments,
     AddComment
   },
   async asyncData({app, store}){
-    const postResponse = await app.$api.postApi.getPost()
-    const commentResponse = await app.$api.commentApi.getComments(postResponse.data.id)
+    const postResponse = await app.$api.postApi.getPost() // get the post from api
+    const commentResponse = await app.$api.commentApi.getComments(postResponse.data.id) // get the comment of the post
 
-    store.commit('comment/setComments', commentResponse.data)
+    store.commit('comment/setComments', commentResponse.data) //store the comment of the post
     return {
-      post: postResponse.data
+      post: postResponse.data //pass the post data to the component
     }
   },
 
   computed: {
+    // get the comment from state
     comments() {
       return this.$store.getters['comment/comments']
     },
+    // This is not working UI aethetics only.
     commentCount() {
       return 10
     },

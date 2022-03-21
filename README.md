@@ -6,11 +6,12 @@ How to run.
 > Single post with nested comments up to 3 nest depth.
 
 **Back-end**
-```
+```bash
 cd backend
 cp .env.example .env
 composer install
-<--if not yet-->
+
+# if not yet
 php artisan key:generate
 php artisan serve
 
@@ -21,7 +22,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 **Front-end**
-```
+```bash
 npm i
 npm run dev
 

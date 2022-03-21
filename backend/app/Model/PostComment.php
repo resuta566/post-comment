@@ -29,6 +29,7 @@ class PostComment extends Model
         return $this->hasMany(PostComment::class, 'comment_id', 'id');
     }
 
+    // Recursive Replies
     public function recursive() {
         $replies = $this->replies()->get();
         $flatReplies = array();
